@@ -63,6 +63,10 @@ const readAllCompanies = async () => {
         as: "category",
       },
     ],
+    order: [
+      ["category_id", "ASC"],
+      ["name", "ASC"],
+    ],
   });
   return companies;
 };
@@ -81,10 +85,63 @@ const readCompanyById = async (id) => {
   return company;
 };
 
+const updateCompanyById = async (
+  id,
+  {
+    category_id,
+    name,
+    owner,
+    logo_url,
+    picture_url,
+    coordinate,
+    instagram_link,
+    wa_link,
+    map_link,
+    facebook_link,
+    twitter_link,
+    content,
+  }
+) => {
+  const updatedCompany = await Company.update(
+    {
+      category_id,
+      name,
+      owner,
+      logo_url,
+      picture_url,
+      coordinate,
+      instagram_link,
+      wa_link,
+      map_link,
+      facebook_link,
+      twitter_link,
+      content,
+    },
+    {
+      where: {
+        id,
+      },
+    }
+  );
+
+  return updatedCompany;
+};
+
+const deleteCompanyById = async (id) => {
+  const deletedCompany = await Company.destroy({
+    where: {
+      id,
+    },
+  });
+  return deletedCompany;
+};
+
 module.exports = {
   createCompany,
   readAllCompanies,
   readAllCompaniesByName,
   readAllCompaniesPerCategory,
   readCompanyById,
+  updateCompanyById,
+  deleteCompanyById,
 };

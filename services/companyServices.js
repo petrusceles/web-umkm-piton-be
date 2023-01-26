@@ -30,7 +30,7 @@ const createCompanyService = async ({
         status: false,
         statusCode: 400,
         message:
-          "all necessary fields (name, ower, logo, picture,coordinate,content, and map_link) must not be empty",
+          "all necessary fields (name, owner, logo, picture,coordinate,content, and map_link) must not be empty",
         data: {
           created_company: null,
         },
@@ -173,8 +173,133 @@ const readCompanyByIdService = async (id) => {
   }
 };
 
+const updateCompanyService = async (
+  id,
+  {
+    category_id,
+    name,
+    owner,
+    logo,
+    picture,
+    coordinate,
+    instagram_link,
+    wa_link,
+    map_link,
+    facebook_link,
+    twitter_link,
+    content,
+  }
+) => {
+  try {
+    const company = await CompanyRepositories.readCompanyById(id);
+
+    if (!company) {
+      return {
+        status: false,
+        statusCode: 404,
+        message: "company not found",
+        data: {
+          updated_company: null,
+        },
+      };
+    }
+    console.log(category_id);
+    if (category_id) {
+      const isCategoryExist = await CategoryRepositories.readCategoryById(
+        category_id
+      );
+
+      if (!isCategoryExist) {
+        return {
+          status: false,
+          statusCode: 404,
+          message: "category not found",
+          data: {
+            updated_company: null,
+          },
+        };
+      }
+    }
+
+    const fileResponsePicture = picture
+      ? await uploadToCloudinary(picture)
+      : null;
+    const fileResponseLogo = logo ? await uploadToCloudinary(logo) : null;
+    // console.log(fileResponsePicture.url);
+    const updatedCompany = await CompanyRepositories.updateCompanyById(id, {
+      category_id,
+      name,
+      owner,
+      coordinate,
+      instagram_link,
+      wa_link,
+      map_link,
+      facebook_link,
+      twitter_link,
+      content,
+      picture_url: fileResponsePicture ? fileResponsePicture.url : undefined,
+      logo_url: fileResponseLogo ? fileResponseLogo.url : undefined,
+    });
+
+    return {
+      status: true,
+      statusCode: 200,
+      message: "company updated",
+      data: {
+        updated_company: updatedCompany,
+      },
+    };
+  } catch (err) {
+    return {
+      status: false,
+      statusCode: 500,
+      message: String(err),
+      data: {
+        updated_company: null,
+      },
+    };
+  }
+};
+
+const deleteCompanyService = async (id) => {
+  try {
+    const isCompanyExist = await CompanyRepositories.readCompanyById(id);
+    if (!isCompanyExist) {
+      return {
+        status: false,
+        statusCode: 404,
+        message: "company doesn't exist",
+        data: {
+          deleted_company: null,
+        },
+      };
+    }
+
+    const deletedCompany = await CompanyRepositories.deleteCompanyById(id);
+    return {
+      status: true,
+      statusCode: 200,
+      message: "company deleted",
+      data: {
+        deleted_company: deletedCompany,
+      },
+    };
+  } catch (err) {
+    return {
+      status: false,
+      statusCode: 500,
+      message: String(err),
+      data: {
+        deleted_company: null,
+      },
+    };
+  }
+};
+
 module.exports = {
   createCompanyService,
   readAllCompaniesService,
   readCompanyByIdService,
+  updateCompanyService,
+  deleteCompanyService,
 };

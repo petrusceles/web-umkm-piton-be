@@ -12,4 +12,11 @@ routes.post(
   CompanyControllers.createCompany
 );
 routes.get("/:id", CompanyControllers.readCompanyById);
+routes.put(
+  "/:id",
+  FileUpload.fileUpload,
+  FileEncoder.fileEncoder,
+  CompanyControllers.updateCompanyById
+);
+routes.delete("/:id", CompanyControllers.deleteCompanyById);
 module.exports = routes;
