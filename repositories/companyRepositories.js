@@ -71,6 +71,15 @@ const readAllCompanies = async () => {
   return companies;
 };
 
+const readAllCompaniesByCategory = async (category_id) => {
+  const companies = await Company.findAll({
+    where: {
+      category_id,
+    },
+  });
+  return companies;
+};
+
 const readAllCompaniesByName = async (name) => {
   const companies = await Company.findAll({
     where: {
@@ -144,4 +153,5 @@ module.exports = {
   readCompanyById,
   updateCompanyById,
   deleteCompanyById,
+  readAllCompaniesByCategory,
 };

@@ -203,7 +203,6 @@ const updateCompanyService = async (
         },
       };
     }
-    console.log(category_id);
     if (category_id) {
       const isCategoryExist = await CategoryRepositories.readCategoryById(
         category_id

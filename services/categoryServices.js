@@ -1,6 +1,6 @@
 const CategoryRepositories = require("../repositories/categoryRepositories");
 const { uploadToCloudinary } = require("../utils/cloudinaryUtils");
-
+const CompanyRepositories = require("../repositories/companyRepositories");
 const createCategoryService = async ({ name, picture, icon }) => {
   try {
     if (!name || !picture || !icon) {
@@ -37,7 +37,6 @@ const createCategoryService = async ({ name, picture, icon }) => {
       ? await uploadToCloudinary(picture)
       : null;
     const fileResponseIcon = icon ? await uploadToCloudinary(icon) : null;
-    console.log(fileResponseIcon.url);
     const newCategory = await CategoryRepositories.createCategory({
       name,
       picture_url: fileResponsePicture ? fileResponsePicture.url : null,
@@ -211,6 +210,19 @@ const deleteCategoryByIdService = async (id) => {
         status: false,
         statusCode: 404,
         message: "category doesn't exist",
+        data: {
+          deleted_category: null,
+        },
+      };
+    }
+
+    const isCategoryStillHasCompanies =
+      await CompanyRepositories.readAllCompaniesByCategory(id);
+    if (isCategoryStillHasCompanies.length) {
+      return {
+        status: false,
+        statusCode: 404,
+        message: "category still has some companies",
         data: {
           deleted_category: null,
         },

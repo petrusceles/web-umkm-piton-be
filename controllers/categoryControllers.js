@@ -4,7 +4,6 @@ const createCategory = async (req, res) => {
   const { name } = req.body;
   const picture = req.picture;
   const icon = req.icon;
-  console.log(icon);
   const { status, statusCode, message, data } =
     await CategoryService.createCategoryService({ name, picture, icon });
   // console.log(status);
