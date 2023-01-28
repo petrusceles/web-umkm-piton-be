@@ -19,7 +19,9 @@ const createCategory = async ({ name, picture_url, icon_url }) => {
 };
 
 const readAllCategories = async () => {
-  const categories = await Category.findAll();
+  const categories = await Category.findAll({
+    order: [["name", "ASC"]],
+  });
   return categories;
 };
 
@@ -44,10 +46,20 @@ const updateCategoryById = async (id, { name, picture_url, icon_url }) => {
   return updatedCategory;
 };
 
+const deleteCategoryById = async (id) => {
+  const deletedCategory = await Category.destroy({
+    where: {
+      id,
+    },
+  });
+  return deletedCategory;
+};
+
 module.exports = {
   readAllCategoriesByName,
   createCategory,
   readAllCategories,
   readCategoryById,
   updateCategoryById,
+  deleteCategoryById,
 };

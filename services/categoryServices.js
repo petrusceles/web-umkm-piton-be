@@ -3,7 +3,7 @@ const { uploadToCloudinary } = require("../utils/cloudinaryUtils");
 
 const createCategoryService = async ({ name, picture, icon }) => {
   try {
-    if (!name || !picture) {
+    if (!name || !picture || !icon) {
       //   console.log("MASUK");
       return {
         status: false,
@@ -37,7 +37,7 @@ const createCategoryService = async ({ name, picture, icon }) => {
       ? await uploadToCloudinary(picture)
       : null;
     const fileResponseIcon = icon ? await uploadToCloudinary(icon) : null;
-    // console.log(fileResponsePicture.url);
+    console.log(fileResponseIcon.url);
     const newCategory = await CategoryRepositories.createCategory({
       name,
       picture_url: fileResponsePicture ? fileResponsePicture.url : null,
@@ -155,10 +155,12 @@ const updateCategoryService = async (id, { name, picture, icon }) => {
       };
     }
 
-    const isCategoryExist = await CategoryRepositories.readAllCategoriesByName(
+    let isCategoryExist = await CategoryRepositories.readAllCategoriesByName(
       name
     );
-
+    isCategoryExist = isCategoryExist.filter((e, i) => {
+      return e.name != name;
+    });
     if (isCategoryExist.length) {
       return {
         status: false,
@@ -201,9 +203,44 @@ const updateCategoryService = async (id, { name, picture, icon }) => {
   }
 };
 
+const deleteCategoryByIdService = async (id) => {
+  try {
+    const isCategoryExist = await CategoryRepositories.readCategoryById(id);
+    if (!isCategoryExist) {
+      return {
+        status: false,
+        statusCode: 404,
+        message: "category doesn't exist",
+        data: {
+          deleted_category: null,
+        },
+      };
+    }
+    const deletedCategory = await CategoryRepositories.deleteCategoryById(id);
+    return {
+      status: true,
+      statusCode: 200,
+      message: "category deleted",
+      data: {
+        deleted_company: deletedCategory,
+      },
+    };
+  } catch (err) {
+    return {
+      status: false,
+      statusCode: 500,
+      message: String(err),
+      data: {
+        deleted_category: null,
+      },
+    };
+  }
+};
+
 module.exports = {
   createCategoryService,
   readAllCategoriesService,
   readCategoryByIdService,
   updateCategoryService,
+  deleteCategoryByIdService,
 };

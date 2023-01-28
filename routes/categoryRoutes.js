@@ -17,4 +17,5 @@ routes.put(
   FileEncoder.fileEncoder,
   CategoryController.updateCategoryById
 );
+routes.delete("/:id", CategoryController.deleteCategoryById);
 module.exports = routes;

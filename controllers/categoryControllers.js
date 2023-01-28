@@ -4,7 +4,7 @@ const createCategory = async (req, res) => {
   const { name } = req.body;
   const picture = req.picture;
   const icon = req.icon;
-  // console.log("masuk");
+  console.log(icon);
   const { status, statusCode, message, data } =
     await CategoryService.createCategoryService({ name, picture, icon });
   // console.log(status);
@@ -54,10 +54,22 @@ const updateCategoryById = async (req, res) => {
   });
 };
 
+const deleteCategoryById = async (req, res) => {
+  const { id } = req.params;
+  const { status, statusCode, message, data } =
+    await CategoryService.deleteCategoryByIdService(id);
+  // console.log(status);
+  return res.status(statusCode).json({
+    status,
+    message,
+    data,
+  });
+};
+
 module.exports = {
   createCategory,
   readAllCategories,
   readCategoryById,
   updateCategoryById,
+  deleteCategoryById,
 };
-

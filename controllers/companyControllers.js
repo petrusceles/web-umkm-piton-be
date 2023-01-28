@@ -110,10 +110,21 @@ const updateCompanyById = async (req, res) => {
     data,
   });
 };
+
+const readAllCompaniesPerCategory = async (req, res) => {
+  const { status, statusCode, message, data } =
+    await CompanyService.readAllCompaniesPerCategoryService();
+  return res.status(statusCode).json({
+    status,
+    message,
+    data,
+  });
+};
 module.exports = {
   readAllCompanies,
   createCompany,
   readCompanyById,
   deleteCompanyById,
   updateCompanyById,
+  readAllCompaniesPerCategory,
 };

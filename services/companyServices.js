@@ -30,7 +30,7 @@ const createCompanyService = async ({
         status: false,
         statusCode: 400,
         message:
-          "all necessary fields (name, owner, logo, picture,coordinate,content, and map_link) must not be empty",
+          "all necessary fields (name, owner, logo, picture, coordinate, content, and map_link) must not be empty",
         data: {
           created_company: null,
         },
@@ -296,10 +296,46 @@ const deleteCompanyService = async (id) => {
   }
 };
 
+const readAllCompaniesPerCategoryService = async () => {
+  try {
+    let categories = await CompanyRepositories.readAllCompaniesPerCategory();
+    categories = categories.filter((e, i) => {
+      return e.companies.length;
+    });
+    if (!categories) {
+      return {
+        status: false,
+        statusCode: 404,
+        message: "categories doesn't exist",
+        data: {
+          companies_per_categories: null,
+        },
+      };
+    }
+    return {
+      status: true,
+      statusCode: 200,
+      message: "companies per categories retrieved",
+      data: {
+        companies_per_categories: categories,
+      },
+    };
+  } catch (err) {
+    return {
+      status: false,
+      statusCode: 500,
+      message: String(err),
+      data: {
+        deleted_company: null,
+      },
+    };
+  }
+};
 module.exports = {
   createCompanyService,
   readAllCompaniesService,
   readCompanyByIdService,
   updateCompanyService,
   deleteCompanyService,
+  readAllCompaniesPerCategoryService,
 };
