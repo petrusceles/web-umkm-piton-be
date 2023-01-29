@@ -1,4 +1,4 @@
-require("dotenv").config;
+require("dotenv").config();
 module.exports = {
   development: {
     username: process.env.DB_USERNAME,
@@ -8,17 +8,21 @@ module.exports = {
     dialect: process.env.DB_DIALECT,
   },
   test: {
-    username: "postgres",
-    password: null,
-    database: "database_test",
-    host: "127.0.0.1",
-    dialect: "mysql",
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE,
+    host: process.env.DB_HOST,
+    dialect: process.env.DB_DIALECT,
   },
   production: {
-    username: "postgres",
-    password: null,
-    database: "database_production",
-    host: "127.0.0.1",
-    dialect: "mysql",
+    use_env_variable: "DB_URL_ELEPHANTSQL",
+    dialect: "postgres",
+    protocol: "postgres",
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
+    },
   },
 };
