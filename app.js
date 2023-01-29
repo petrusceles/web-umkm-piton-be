@@ -14,28 +14,26 @@
 
 // module.exports = app;
 
-const express = require('express')
-const routes = require("./routes");
-const cors = require("cors");
-require("dotenv").config();
-app.use(express.json());
-app.use(cors());
-app.use("/api", routes);
+const express = require("express");
+// const routes = require("./routes");
+// const cors = require("cors");
+// require("dotenv").config();
+// app.use(express.json());
 
-const app = express()
-const PORT = 4000
+const app = express();
+const PORT = process.env.PORT;
 
 app.listen(PORT, () => {
-  console.log(`API listening on PORT ${PORT} `)
-})
+  console.log(`API listening on PORT ${PORT} `);
+});
 
-app.get('/', (req, res) => {
-  res.send('Hey this is my API running 🥳')
-})
+app.get("/", (req, res) => {
+  res.send(`Hey this is my API PORT ${PORT} running 🥳`);
+});
 
-app.get('/about', (req, res) => {
-  res.send('This is my about route..... ')
-})
+app.get("/about", (req, res) => {
+  res.send("This is my about route..... ");
+});
 
 // Export the Express API
-module.exports = app
+module.exports = app;
