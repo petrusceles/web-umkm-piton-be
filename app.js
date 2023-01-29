@@ -11,3 +11,5 @@ app.use("/api", routes);
 app.listen(process.env.PORT || 3456, () => {
   console.log(`http://localhost:${process.env.PORT || 3456}`);
 });
+
+module.exports = app;
