@@ -15,6 +15,12 @@
 // module.exports = app;
 
 const express = require('express')
+const routes = require("./routes");
+const cors = require("cors");
+require("dotenv").config();
+app.use(express.json());
+app.use(cors());
+app.use("/api", routes);
 
 const app = express()
 const PORT = 4000
