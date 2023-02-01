@@ -8,7 +8,7 @@ app.use(express.json());
 // API Documentation
 app.use(
   cors({
-    origin: "https://web-umkm-piton.vercel.app",
+    origin: ["https://web-umkm-piton.vercel.app", "http://localhost:3000"],
   })
 );
 app.use("/api", routes);
